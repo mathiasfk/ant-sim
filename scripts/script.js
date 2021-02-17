@@ -168,9 +168,15 @@ class Grid {
         ctx.fillRect(screenX, screenY, this._pixel_size, this._pixel_size);
     }
 
+    _getCoordinatesFromEvent(e) {
+        const isTouch = e instanceof TouchEvent;
+        const x = (isTouch ? e.touches[0].clientX : e.clientX) - window.canvas.offsetLeft;
+        const y = (isTouch ? e.touches[0].clientY : e.clientY) - window.canvas.offsetTop;
+        return [x, y];
+    }
+
     mouseHandler(e) {
-        const x = e.clientX - window.canvas.offsetLeft;
-        const y = e.clientY - window.canvas.offsetTop;
+        const [x, y] = this._getCoordinatesFromEvent(e);
     
         switch(e.type){
             case 'touchstart':
