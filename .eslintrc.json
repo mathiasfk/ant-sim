@@ -1,0 +1,42 @@
+{
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+  
+    "ecmaFeatures": {
+      "arrowFunctions": true,
+      "binaryLiterals": true,
+      "blockBindings": true,
+      "classes": true,
+      "defaultParams": true,
+      "destructuring": true,
+      "forOf": true,
+      "generators": true,
+      "modules": true,
+      "objectLiteralComputedProperties": true,
+      "objectLiteralDuplicateProperties": true,
+      "objectLiteralShorthandMethods": true,
+      "objectLiteralShorthandProperties": true,
+      "octalLiterals": true,
+      "regexUFlag": true,
+      "regexYFlag": true,
+      "spread": true,
+      "superInFunctions": true,
+      "templateStrings": true,
+      "unicodeCodePointEscapes": true,
+      "globalReturn": true
+    },
+    
+    "parserOptions": {
+      "sourceType": "module"
+    },
+
+    "rules": {
+        "no-var":"error",
+        "no-undef":"error",
+        "prefer-const":"error",
+        "prefer-arrow-callback":"error",
+        "jsx-quotes": [2, "prefer-single"]
+    }
+  }
