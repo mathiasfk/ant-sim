@@ -12,7 +12,7 @@ const ANT_COUNT = 10;
 const ANT_VISION_ANGLE = 120;
 const ANT_VISION_ANGLE_INCREMENT = 15;
 const ANT_VISION_DISTANCE = 1.2;
-const ANT_SPEED = 0.1;
+const ANT_SPEED = 0.2;
 
 // Visuals
 const ANT_COLOR = 'red';
@@ -134,6 +134,12 @@ class Grid {
         this._grid[`${gridX},${gridY}`] = newValue;
     }
 
+    _deletePixel(x, y) {
+        const gridX = Math.round(x / PIXEL_SIZE);
+        const gridY = Math.round(y / PIXEL_SIZE);
+        delete this._grid[`${gridX},${gridY}`];
+    }
+
     _getColor (value) {
         const grade = value > 255 ? 255 : Math.floor(value);
         return `rgba(${grade},${grade},0,1)`;
@@ -162,6 +168,29 @@ class Grid {
         ctx.fillRect(screenX, screenY, this._pixel_size, this._pixel_size);
     }
 
+    mouseHandler(e) {
+        const x = e.clientX - window.canvas.offsetLeft;
+        const y = e.clientY - window.canvas.offsetTop;
+    
+        switch(e.type){
+            case 'touchstart':
+            case 'mousedown':
+                this.isClicked = true;
+                break;
+            case 'touchend':
+            case 'touchleave':
+            case 'touchcancel':
+            case 'mouseup':
+            case 'mouseout':
+                this.isClicked = false;
+                break;
+        }
+    
+        if (this.isClicked) {
+            this._deletePixel(x, y);
+        }
+    }
+
     draw(ctx) {
         Object.keys(this._grid).forEach(pos => {
             const value = this._grid[pos];
@@ -188,20 +217,39 @@ const initializeAnts = (quantity) => {
 };
 
 const draw = (timestamp) => {
-    const ctx = document.getElementById("canvas").getContext("2d");
 
-    ctx.globalCompositeOperation = "destination-over";
-    ctx.clearRect(0, 0, CANVAS_SIZE + ANT_SIZE, CANVAS_SIZE + ANT_SIZE);
+    window.ctx.globalCompositeOperation = "destination-over";
+    window.ctx.clearRect(0, 0, CANVAS_SIZE + ANT_SIZE, CANVAS_SIZE + ANT_SIZE);
 
-    window.ants.forEach(ant => ant.move(ctx, window.grid));
-    window.grid.draw(ctx);
+    window.ants.forEach(ant => ant.move(window.ctx, window.grid));
+    window.grid.draw(window.ctx);
 
     window.requestAnimationFrame(draw);
 }
 
+
 const init = () => {
     window.ants = initializeAnts(ANT_COUNT);
     window.grid = new Grid(GRID_SIZE, PIXEL_SIZE);
+    window.canvas = document.getElementById("canvas");
+    window.ctx = window.canvas.getContext("2d");
+
+    const events = [
+        "mousemove",
+        "mousedown",
+        "mouseup",
+        "mouseout",
+        "touchstart",
+        "touchend",
+        "touchcancel",
+        "touchleave",
+        "touchmove"
+    ];
+
+    events.forEach(
+        event => window.canvas.addEventListener(event, e => window.grid.mouseHandler(e), false)
+    );
+
     window.requestAnimationFrame(draw);
 }
 
