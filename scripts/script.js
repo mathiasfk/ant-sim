@@ -194,6 +194,10 @@ class Grid {
     
         if (this.isClicked) {
             this._deletePixel(x, y);
+            this._deletePixel(x - PIXEL_SIZE, y);
+            this._deletePixel(x + PIXEL_SIZE, y);
+            this._deletePixel(x, y - PIXEL_SIZE);
+            this._deletePixel(x, y + PIXEL_SIZE);
         }
     }
 
