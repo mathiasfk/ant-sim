@@ -8,7 +8,7 @@ const VALUE_DECREMENT = 0.2;
 
 // Ant properties
 const ANT_SIZE = 1;
-const ANT_COUNT = 10;
+const INITIAL_ANT_COUNT = 10;
 const ANT_VISION_ANGLE = 120;
 const ANT_VISION_ANGLE_INCREMENT = 15;
 const ANT_VISION_DISTANCE = 1.2;
@@ -237,9 +237,29 @@ const draw = (timestamp) => {
     window.requestAnimationFrame(draw);
 }
 
+const sliderHandler = (e) => {
+    const newCount = e.toElement.value;
+    const currentCount = window.ants.length;
+    
+    if(newCount >= currentCount) {
+        for(let id = currentCount; id < newCount; id++){
+            window.ants[id] = new Ant(GRID_SIZE);
+        }
+    } else {
+        for(let id = currentCount - 1; id >= newCount; id--){
+            window.ants.splice(id);
+        }
+    }
+    console.log(newCount);
+    console.log(window.ants.length);
+}
+
 
 const init = () => {
-    window.ants = initializeAnts(ANT_COUNT);
+
+    document.getElementById("ant-count").addEventListener("mouseup", e => sliderHandler(e));
+
+    window.ants = initializeAnts(INITIAL_ANT_COUNT);
     window.grid = new Grid(GRID_SIZE, PIXEL_SIZE);
     window.canvas = document.getElementById("canvas");
     window.ctx = window.canvas.getContext("2d");

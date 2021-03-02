@@ -5,3 +5,12 @@ body {
 canvas {
     background-color:rgb(1, 1, 19);
 }
+
+label {
+    font: 1rem 'Fira Sans', sans-serif;
+    color: white;
+}
+
+input {
+    margin: .4rem;
+}
